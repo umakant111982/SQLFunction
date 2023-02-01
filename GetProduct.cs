@@ -46,7 +46,7 @@ namespace SQLFunction
                 }
 
             }
-            return new OkObjectResult(_products_lst);
+            return new OkObjectResult(JsonConvert.SerializeObject(_products_lst));
         }
 
         [FunctionName("GetProduct")]
