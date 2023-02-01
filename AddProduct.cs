@@ -15,7 +15,8 @@ namespace SQLFunction
     {
         private static SqlConnection GetConnection()
         {
-            string connectionString = "Server=tcp:projectappserver.database.windows.net,1433;Initial Catalog=appdb;Persist Security Info=False;User ID=sqladmin;Password=Pa55word;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;";
+            //string connectionString = "Server=tcp:projectappserver.database.windows.net,1433;Initial Catalog=appdb;Persist Security Info=False;User ID=sqladmin;Password=Pa55word;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;";
+            string connectionString = Environment.GetEnvironmentVariable("SQLAZURECONNSTR_SQLConnectionString");
             return new SqlConnection(connectionString);
         }
 
