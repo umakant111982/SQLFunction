@@ -30,7 +30,7 @@ namespace SQLFunction
             SqlConnection _connection = GetConnection();
             _connection.Open();
 
-            string _statement = "INSERT INTO PRODUCT (PRODUCTID,PRODUCTNAME,QUANTITY) VALUES(@PARAM1,@PARAM2,@PARAM3)";
+            string _statement = "INSERT INTO PRODUCTS (ProductID,ProductName,Quantity) VALUES(@PARAM1,@PARAM2,@PARAM3)";
 
             using (SqlCommand cmd = new SqlCommand(_statement, _connection))
             {
