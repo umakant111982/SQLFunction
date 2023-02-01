@@ -20,8 +20,8 @@ namespace SQLFunction
             return new SqlConnection(connectionString);
         }
 
-        [FunctionName("GetProduct")]
-        public static async Task<IActionResult> Run(
+        [FunctionName("GetProducts")]
+        public static async Task<IActionResult> RunProducts(
             [HttpTrigger(AuthorizationLevel.Function, "get", "post", Route = null)] HttpRequest req,
             ILogger log)
         {
@@ -48,5 +48,39 @@ namespace SQLFunction
             }
             return new OkObjectResult(_products_lst);
         }
-    }    
+
+        [FunctionName("GetProduct")]
+        public static async Task<IActionResult> RunProduct(
+            [HttpTrigger(AuthorizationLevel.Function, "get", "post", Route = null)] HttpRequest req,
+            ILogger log)
+        {            
+            int _productID = int.Parse(req.Query["id"]);
+
+            string _statement = String.Format("SELECT ProductID,ProductName,Quantity from Products where ProductID={0}", _productID);
+            SqlConnection _sqlConnection = GetConnection();
+            _sqlConnection.Open();
+
+            SqlCommand _sqlCommand = new SqlCommand(_statement, _sqlConnection);
+            Product _product = new Product();
+
+            try
+            {
+                using (SqlDataReader _reader = _sqlCommand.ExecuteReader())
+                {
+                    _reader.Read();
+                    _product.ProductID = _reader.GetInt32(0);
+                    _product.ProductName = _reader.GetString(1);
+                    _product.Quantity = _reader.GetInt32(2);
+                    var response = _product;
+                    return new OkObjectResult(JsonConvert.SerializeObject(response));
+                }
+            }
+            catch (Exception ex)
+            {
+                var response = "No Records found" + ex;
+                _sqlConnection.Close();
+                return new OkObjectResult(response);
+            }            
+        }
+    }
 }
